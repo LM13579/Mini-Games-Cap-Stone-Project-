@@ -1,0 +1,174 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    background-color: black;
+    color: white;
+    text-align: center;
+    background-image:url(https://i.redd.it/s5u0lxo3twkb1.gif) ;
+    background-size: 20%;
+}
+p{
+    margin-bottom: 10px;
+}
+
+.grid{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 26px;
+}
+.container{
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 16px;
+}
+
+.card{
+    position: relative;
+    background-color: rgb(26, 38, 92);
+    border-radius: 14px;
+    padding: 16px;
+    border-radius: 14px;
+    overflow: hidden;/* clips the shine inside the card */
+    cursor: pointer;
+    transition:  transform 0.3s ease box-shadow 0.3s ease;
+    border: 2px solid rgb(255, 255, 255);
+    background-image: url(https://media.giphy.com/media/DeRhjocryi3Is/giphy.gif);
+    
+}
+.card:hover{
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgb(232, 237, 240);
+}
+
+.card:hover .poster{
+    transform: scale(1.07);
+    margin: 20px;
+}
+
+.card::before{
+    content:"";
+    position: absolute;
+    inset: -120px;
+    left: -140%;
+    opacity: 0;
+    transform: rotate(4deg);
+    background: linear-gradient(115deg, transparent 40%, rgba(232, 232, 232, 0.25)50%, transparent 60%);
+
+}
+
+.card:hover::before{
+    opacity: 1;
+    animation: shine 0.8s ease forwards;
+
+}
+
+@keyframes shine{
+    from {left:-40%}
+    to {left:140%}
+}
+
+@media (max-width:700px) {
+    .grid{
+        grid-template-columns: 1fr;
+    }
+}
+
+#btn{
+    padding: 2px 13px;
+    border-radius: 25px;
+    border: 2px solid #ffffff;
+    background-color: #000000ae;
+    cursor:crosshair;
+    margin-top: 20px;
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+    text-shadow: 0 0 10px #f1fff9;
+    /* Apply the animation */
+    animation-name: pulse;
+    animation-duration: 2.5s; /* Duration of one pulse cycle */
+    animation-iteration-count: infinite; /* Makes it repeat forever */
+    animation-timing-function: ease-in-out; /* Smooths the start and end of the animation */
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1.1); /* Original size */
+        opacity: 1;
+    }
+    50% {
+        transform: scale(0.23s); /* Slightly larger */
+        opacity: 0.7; /* Optional: fade slightly */
+    }
+    100% {
+        transform: scale(1); /* Back to original size */
+        opacity: 1;
+    }
+}
+
+
+#btn:hover{
+    background-color: rgb(255, 255, 255);
+    color: black;
+    border: 2px solid black;
+
+    
+}
+
+
+.poster{
+    height: 155px;
+    border-radius: 25px;
+    background-color: rgb(54, 82, 107);
+    display: grid;
+    place-items: center;
+    font-size: 50px;
+    transition: transform 0.3s ease;
+}
+
+
+#title{
+    font-weight: 700;
+    font-size: 2.3rem;
+    color: rgb(167, 30, 12);
+    letter-spacing: 0.15em;
+    margin-bottom: 0.8rem;
+    text-shadow: 0  1px rgb(242, 245, 244);
+    animation-name: pulse;
+    animation-duration: 2.5s; /* Duration of one pulse cycle */
+    animation-iteration-count: infinite; /* Makes it repeat forever */
+    animation-timing-function: ease-in-out;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1.1); /* Original size */
+        opacity: 2;
+    }
+    50% {
+        transform: scale(1.1); /* Slightly larger */
+        opacity: 0.8; /* Optional: fade slightly */
+    }
+    100% {
+        transform: scale(1); /* Back to original size */
+        opacity: 1;
+    }
+}
+
+
+header{
+    border-radius: 14px;
+    padding: 16px;
+}
+
+canvas{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -999;
+}

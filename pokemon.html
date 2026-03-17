@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokemon Lite</title>
+<style>
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    }
+
+    body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    padding: 20px;
+    color: #eae6e6;
+    background-image: url(https://4kwallpapers.com/images/wallpapers/pokemon-go-5k-black-2048x2048-21680.png);
+    background-size: 50%;
+    }
+
+    h1 {
+    text-align: center;
+    color: white;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .subtitle {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0  0 2px rgb(242, 245, 244);
+    margin-bottom: 30px;
+    font-size: 1.1rem;
+    }
+
+    .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    }
+
+    .pokemon-card {
+    background: white;
+    border-radius: 20px;
+    padding: 25px;
+    width: 220px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    transition: transform 0.2s;
+    background-image: url(https://i.pinimg.com/originals/13/1c/c4/131cc46738918de0a076aae210d8f712.gif);
+    background-size: 166%;
+    background-repeat: no-repeat;
+    }
+
+    .pokemon-card:hover {
+    transform: translateY(-5px); 
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgb(232, 237, 240);
+    }
+    
+
+    .pokemon-card.enemy {
+    background: linear-gradient(145deg, #ff6b6b 0%, #ee5a24 100%);
+    color: white;
+    background-image: url(https://media.tenor.com/X-SifuuFqQEAAAAM/charmander-fire-breath.gif);
+    background-repeat: no-repeat;
+    background-size: 166%;
+    }
+
+    .sprite {
+    font-size: 4rem;
+    margin-bottom: 10px;
+    }
+
+    .pokemon-card h2 {
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+    }
+
+    .hp-bar {
+    background: #e0e0e0;
+    border-radius: 10px;
+    height: 20px;
+    overflow: hidden;
+    margin-bottom: 8px;
+    border: 2px solid #333;
+    }
+
+    .hp-fill {
+    background: linear-gradient(90deg, #4caf50, #8bc34a);
+    height: 100%;
+    width: 100%;
+    transition: width 0.3s ease;
+    }
+
+    .hp-fill.enemy-hp {
+    background: linear-gradient(90deg, #f44336, #ff5722);
+    }
+
+    .hp-fill.low {
+    background: linear-gradient(90deg, #ff9800, #ff5722);
+    }
+
+    .hp-fill.critical {
+    background: linear-gradient(90deg, #f44336, #d32f2f);
+    }
+
+    .hp-text {
+    font-weight: bold;
+    margin-bottom: 5px;
+    }
+
+    .status {
+    font-size: 0.9rem;
+    font-style: italic;
+    color: #666;
+    min-height: 20px;
+    }
+
+    .pokemon-card.enemy .status {
+    color: rgba(255,255,255,0.9);
+    }
+
+    .vs {
+    font-size: 2rem;
+    font-weight: bold;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+    }
+
+    .move-btn {
+    padding: 15px 20px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: all 0.2s;
+    min-width: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    }
+
+    .move-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    }
+
+    .move-btn:active {
+    transform: scale(0.95);
+    }
+
+    .move-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    }
+
+    .move-btn.electric:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgb(227, 255, 13);
+
+    }
+    .move-btn.electric{
+    background: linear-gradient(145deg, #ffd700, #ffaa00);
+    color: #333;
+    }
+
+    .move-btn.quick:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgba(255, 255, 255, 0.741);
+    }
+    .move-btn.quick{
+    background: linear-gradient(145deg, #87ceeb, #5f9ea0);
+    color: white;
+    }
+
+    .move-btn.heal:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgb(9, 255, 169);
+    }
+    .move-btn.heal{
+    background: linear-gradient(145deg, #98fb98, #3cb371);
+    color: #333;
+    }
+
+    .move-btn.special {
+    background: linear-gradient(145deg, #dda0dd, #9370db);
+    color: white;
+    }
+    .move-btn.special:hover{
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgb(233, 9, 233); 
+    }
+
+    .damage, .heal-amount {
+    font-size: 0.8rem;
+    opacity: 0.8;
+    }
+
+    .battle-log {
+    max-width: 600px;
+    margin: 0 auto 20px;
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    max-height: 200px;
+    overflow-y: auto;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+    .battle-log:hover{
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgb(215, 8, 8); 
+    }
+
+    .log-entry {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+    animation: fadeIn 0.3s ease;
+    }
+
+    .log-entry:last-child {
+    border-bottom: none;
+    }
+
+    .log-entry.damage {
+    color: #e74c3c;
+    }
+
+    .log-entry.heal {
+    color: #27ae60;
+    }
+
+    .log-entry.special {
+    color: #8e44ad;
+    font-weight: bold;
+    }
+
+    @keyframes fadeIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+    }
+
+    .reset-btn {
+    display: block;
+    margin: 0 auto;
+    padding: 15px 40px;
+    background: linear-gradient(145deg, #09d21794, #34495e);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    }
+
+    .reset-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgb(23, 144, 55);
+    }
+
+    .winner {
+    animation: winnerPulse 1s ease infinite;
+    }
+
+    @keyframes winnerPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    }
+
+    .loser {
+    opacity: 0.6;
+    filter: grayscale(0.5);
+    }
+
+    @media (max-width: 600px) {
+    .container {
+        flex-direction: column;
+    }
+    
+    .vs {
+        transform: rotate(90deg);
+    }
+    }
+    #back:hover{
+        transform: scale(1.05);
+        box-shadow: 0 0 40px rgb(245, 245, 5);
+    }
+    #back{
+        color: yellow;
+        background-color: black;
+        padding: 2px 13px;
+        border-radius: 25px;
+        font-weight: bold;
+        border-radius: 30px;
+        font-size: 1.1rem;
+    }
+</style>
+</head>
+<body>
+    <button id= "back" onclick="goBack()">⬅ Back</button>
+    <h1>⚡ Pokemon Lite</h1>
+    <p class="subtitle">Choose your move and defeat your opponent!</p>
+    <div>
+        <marquee direction="right"><img src="https://i0.wp.com/lordlibidan.com/wp-content/uploads/2019/03/Running-Pikachu-GIF.gif?fit=480%2C342&ssl=1" width="60"></marquee>
+    </div>
+
+    <div class="container">
+        <div class="pokemon-card" id="playerCard">
+            <div class="sprite">⚡</div>
+            <h2>Pikachu</h2>
+            <div class="hp-bar">
+                <div class="hp-fill" id="playerHpBar"></div>
+            </div>
+            <p class="hp-text">HP: <span id="playerHp">100</span>/100</p>
+            <p class="status" id="playerStatus"></p>
+        </div>
+
+        <div class="vs">VS</div>
+
+        <div class="pokemon-card enemy" id="enemyCard">
+            <div class="sprite">🔥</div>
+            <h2>Charmander</h2>
+            <div class="hp-bar">
+                <div class="hp-fill enemy-hp" id="enemyHpBar"></div>
+            </div>
+            <p class="hp-text">HP: <span id="enemyHp">100</span>/100</p>
+            <p class="status" id="enemyStatus"></p>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="move-btn electric" onclick="player.thunderShock()">
+            ⚡ Thunder Shock
+            <span class="damage">15 dmg</span>
+        </button>
+        <button class="move-btn quick" onclick="player.quickAttack()">
+            💨 Quick Attack
+            <span class="damage">10 dmg</span>
+        </button>
+        <button class="move-btn heal" onclick="player.heal()">
+            🧪 Potion
+            <span class="heal-amount">+25 HP</span>
+        </button>
+        <button class="move-btn special" onclick="player.spark()">
+            ✨ Spark
+            <span class="damage">25 dmg (1 use)</span>
+        </button>
+    </div>
+
+    <div class="battle-log" id="battleLog">
+        <p class="log-entry">Battle started! Pikachu vs Charmander!</p>
+    </div>
+
+    <button class="reset-btn" onclick="resetGame()">New Battle</button>
+
+    <script>
+        // ============================================================
+// POKEMON LITE — STARTER FILE
+// ============================================================
+// Your job: fill in every method marked with YOUR TURN.
+// The properties are already set up for you.
+// Read the hints carefully — they tell you exactly what to do.
+// ============================================================
+
+
+// ============================================================
+// ENEMY POKEMON — Charmander (already complete — study this!)
+// ============================================================
+// Watch how it works.
+// Your player object will follow the exact same pattern.
+
+const enemy = {
+    name: "Charmander",
+    hp: 100,
+    maxHp: 100,
+
+    // Called automatically after the player takes a turn
+    enemyTurn() {
+        if (gameOver) return;
+
+        // Pick a random move from this list
+        const moves = [
+            { name: "Ember",   damage: 15 },
+            { name: "Scratch", damage: 10 },
+            { name: "Growl",   damage: 8  }
+        ];
+
+        const move = moves[Math.floor(Math.random() * moves.length)];
+
+        player.takeDamage(move.damage);
+        logAction(`Charmander used ${move.name}! Dealt ${move.damage} damage!`, 'damage');
+
+        updateUI();
+        checkGameOver();
+    },
+
+    // Reduces this pokemon's HP — never goes below 0
+    takeDamage(damage) {
+        this.hp = Math.max(0, this.hp - damage);
+        updateUI();
+    }
+};
+
+
+// ============================================================
+// PLAYER POKEMON — Pikachu (YOUR TURN)
+// ============================================================
+// Properties are done. You implement the methods below.
+
+const player = {
+    name: "Pikachu",
+    hp: 100,
+    maxHp: 100,
+    potions: 2,
+    sparkUsed: false,
+
+    // ----------------------------------------------------------
+    // METHOD 1: thunderShock()
+    // ----------------------------------------------------------
+    // WHAT IT SHOULD DO:
+    //   1. If the game is over, stop immediately (guard clause)
+    //   2. Deal 15 damage to the enemy using enemy.takeDamage()
+    //   3. Log the action using logAction() — include the damage amount
+    //   4. Call updateUI() to refresh the screen
+    //   5. Call checkGameOver() to see if the enemy fainted
+    //   6. If the game is NOT over, trigger enemy.enemyTurn() after 1 second
+    //
+    // HINT — triggering the enemy turn after a delay:
+    //   setTimeout(() => enemy.enemyTurn(), 1000);
+    // ----------------------------------------------------------
+    thunderShock() {
+        // YOUR TURN
+        if (gameOver) {
+            return
+        }
+        const damage = 15;
+        enemy.takeDamage(damage)
+        logAction(`Pikachu used Thunder Shock! Dealt ${damage}`)
+        updateUI();
+        checkGameOver()
+        if(!gameOver) {
+            setTimeout(() => {
+                enemy.enemyTurn()
+            }, 1000);
+        }
+
+
+
+    },
+
+    // ----------------------------------------------------------
+    // METHOD 2: quickAttack()
+    // ----------------------------------------------------------
+    // Same pattern as thunderShock() but deals 10 damage.
+    // ----------------------------------------------------------
+    quickAttack() {
+        // YOUR TURN ↓
+        if (gameOver) {
+            return
+        }
+        const damage = 10;
+        enemy.takeDamage(damage)
+        logAction(`Pikachu used Thunder Shock! Dealt ${damage}`)
+        updateUI();
+        checkGameOver()
+        if(!gameOver) {
+            setTimeout(() => {
+                enemy.enemyTurn()
+            }, 1000);
+        }
+
+
+
+    },
+
+
+    // ----------------------------------------------------------
+    // METHOD 3: heal()
+    // ----------------------------------------------------------
+    // WHAT IT SHOULD DO:
+    //   1. Guard clause: stop if game is over
+    //   2. Guard clause: stop if potions === 0, log "No potions left!"
+    //   3. Guard clause: stop if hp is already at maxHp, log "HP is already full!"
+    //   4. Add 25 HP — but never exceed maxHp
+    //      HINT: this.hp = Math.min(this.hp + 25, this.maxHp);
+    //   5. Subtract 1 from potions
+    //   6. Log the heal action
+    //   7. Call updateUI()
+    //   8. Trigger enemy.enemyTurn() after 1 second (healing costs a turn!)
+    // ----------------------------------------------------------
+    heal() {
+        // YOUR TURN ↓
+        if (gameOver) {
+            return;
+        }
+        if (this.potion <= 0) {
+            logAction("Hp is already full", `heal`);
+            return;
+        }
+
+        if (this.hp >= maxhp){
+            logAction("HP is already full", `damage`);
+            return;
+        }
+        const healAmount = 25;
+        this.hp = Math.min( this.hp + healAmount, this.maxhp);
+        this.poition--;
+
+        logAction(`Pikachu used a potion! Recovered ${healAmount} HP!`, `heal`);
+        
+        updateUI();
+
+        setTimeout(() => enemy.enemyTurn(),1000);
+    },
+
+    // ----------------------------------------------------------
+    // METHOD 4: spark()  ★ Special Move — 1 use only
+    // ----------------------------------------------------------
+    // WHAT IT SHOULD DO:
+    //   1. Guard clause: stop if game is over
+    //   2. Guard clause: if sparkUsed is true, log "Spark already used!" and stop
+    //   3. Deal 25 damage to the enemy
+    //   4. Set sparkUsed to true
+    //   5. Log the action (hint: use the 'special' type in logAction)
+    //   6. updateUI(), checkGameOver(), trigger enemy turn if not over
+    // ----------------------------------------------------------
+    spark() {
+        // YOUR TURN ↓
+        if (gameOver){
+            return 
+        }
+
+        if(this.sparkUsed) {
+            logAction(`Spark has already been used`, `damage`)
+            return
+        }
+
+        const damage = 25;
+        enemy.takeDamage(damage);
+        this.sparkUsed = true;
+        logAction(`Pikachu used Spark! A critical hit! Dealt ${damage} damage!`, `special`);
+
+        updateUI();
+        checkGameOver();
+
+        if (!gameOver) {
+            setTimeout(() => enemy.enemyTurn(),1000);
+        }
+
+    },
+
+    // ----------------------------------------------------------
+    // METHOD 5: takeDamage()  (already done — study this!)
+    // ----------------------------------------------------------
+    // This is called by the enemy to hurt the player.
+    // Notice how it uses Math.max to prevent HP going below 0.
+    // ----------------------------------------------------------
+    takeDamage(damage) {
+        this.hp = Math.max(0, this.hp - damage);
+        updateUI();
+    }
+};
+
+
+// ============================================================
+// GAME STATE
+// ============================================================
+// This single variable controls whether the game is running.
+// Every method checks this first. This is your "source of truth."
+
+let gameOver = false;
+
+
+// ============================================================
+// updateUI() — already complete, study this!
+// ============================================================
+// This function reads from the player and enemy objects
+// and pushes those values into the HTML.
+// Rule: NEVER update the DOM inside a method — always call this.
+
+function updateUI() {
+    // Update HP numbers
+    document.getElementById('playerHp').textContent = player.hp;
+    document.getElementById('enemyHp').textContent = enemy.hp;
+
+    // Update HP bar widths as a percentage
+    const playerHpPercent = (player.hp / player.maxHp) * 100;
+    const enemyHpPercent  = (enemy.hp  / enemy.maxHp)  * 100;
+
+    document.getElementById('playerHpBar').style.width = playerHpPercent + '%';
+    document.getElementById('enemyHpBar').style.width  = enemyHpPercent  + '%';
+
+    // Color the HP bars based on remaining health
+    updateHpBarColor('playerHpBar', playerHpPercent);
+    updateHpBarColor('enemyHpBar',  enemyHpPercent);
+
+    // Update the potion button to show how many are left
+    const potionBtn = document.querySelector('.move-btn.heal');
+    potionBtn.innerHTML = `🧪 Potion <span class="heal-amount">+25 HP (${player.potions} left)</span>`;
+
+    // Disable the spark button once it's been used
+    const sparkBtn = document.querySelector('.move-btn.special');
+    if (player.sparkUsed) {
+        sparkBtn.disabled = true;
+        sparkBtn.innerHTML = `✨ Spark <span class="damage">USED</span>`;
+    }
+
+    // Disable all buttons when the game ends
+    if (gameOver) {
+        document.querySelectorAll('.move-btn').forEach(btn => btn.disabled = true);
+    }
+}
+
+function updateHpBarColor(elementId, percentage) {
+    const bar = document.getElementById(elementId);
+    bar.classList.remove('low', 'critical');
+    if (percentage <= 25) bar.classList.add('critical');
+    else if (percentage <= 50) bar.classList.add('low');
+}
+
+
+// ============================================================
+// logAction() — already complete, study this!
+// ============================================================
+// Adds a new line to the battle log at the top.
+// type can be: 'damage', 'heal', 'special', or '' (default)
+
+function logAction(message, type = '') {
+    const log   = document.getElementById('battleLog');
+    const entry = document.createElement('p');
+    entry.className  = `log-entry ${type}`;
+    entry.textContent = message;
+    log.insertBefore(entry, log.firstChild);
+}
+
+
+// ============================================================
+// checkGameOver() — YOUR TURN
+// ============================================================
+// WHAT IT SHOULD DO:
+//   1. If enemy.hp <= 0:
+//      - Set gameOver = true
+//      - Log a win message (use 'special' type)
+//      - Add 'winner' class to playerCard, 'loser' class to enemyCard
+//      - Set enemyStatus text to "💀 Fainted"
+//      - return (stop here)
+//   2. If player.hp <= 0:
+//      - Set gameOver = true
+//      - Log a lose message (use 'damage' type)
+//      - Add 'winner' class to enemyCard, 'loser' class to playerCard
+//      - Set playerStatus text to "💀 Fainted"
+//
+// HINT — adding a class to an element:
+//   document.getElementById('playerCard').classList.add('winner');
+// HINT — setting status text:
+//   document.getElementById('enemyStatus').textContent = "💀 Fainted";
+// ============================================================
+function checkGameOver() {
+    // YOUR TURN ↓
+    if(enemy.hp <= 0) {
+        gameOver = true;
+        logAction(`Pikachu wins! Charmander faints.`)
+        document.getElementById(`plaerCard`).classList.add(`winner`)
+        document.getElementById(`enemyCard`).classList.add(`Loser`)
+        document.getElementById(`plaerCard`).classList.add(`winner`)
+    }
+
+
+
+}
+
+
+// ============================================================
+// resetGame() — already complete, study this!
+// ============================================================
+// Resets all state back to starting values and refreshes the UI.
+
+function resetGame() {
+    player.hp        = 100;
+    player.potions   = 2;
+    player.sparkUsed = false;
+
+    enemy.hp = 100;
+
+    gameOver = false;
+
+    document.getElementById('battleLog').innerHTML =
+        '<p class="log-entry">Battle started! Pikachu vs Charmander!</p>';
+
+    document.getElementById('playerCard').classList.remove('winner', 'loser');
+    document.getElementById('enemyCard').classList.remove('winner', 'loser');
+    document.getElementById('playerStatus').textContent = '';
+    document.getElementById('enemyStatus').textContent  = '';
+
+    document.querySelectorAll('.move-btn').forEach(btn => btn.disabled = false);
+
+    const sparkBtn = document.querySelector('.move-btn.special');
+    sparkBtn.innerHTML = '✨ Spark <span class="damage">25 dmg (1 use)</span>';
+
+    updateUI();
+    }
+
+
+    // ============================================================
+    // Start the game — initialize the UI on page load
+    // ============================================================
+    updateUI();
+    function goBack() {
+    window.history.back();
+    }
+    </script>
+</body>
+</html>

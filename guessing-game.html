@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guessing Game</title>
+    <style>
+        #back:hover{
+        transform: scale(1.05);
+        box-shadow: 0 0 40px rgb(0, 153, 255);
+    }
+    </style>
+    <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+</head>
+<body>
+    <button id="back" onclick="goBack()">⬅ Back</button>
+    <main class="container">
+        <h1>Guess The Number</h1>
+        <p id="message">Guess a number from 1 to 100</p>
+        <div>
+            <marquee><img src="https://media4.giphy.com/media/v1.Y2lkPTZjMDliOTUyOTRlNm5pb2E1ODdldXVxNmpxbGs4ZHlhN3djeW5yNmV4MnN0bHJkbyZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/2izKYYBNvC54k/200w.gif" width="50"></marquee>
+        </div>
+        <p>Attempts: <span id="tries">0</span></p>
+        <input id="guess" type="number" min="1" max="10" placeholder="1-10">
+
+        <button onclick="checkguess()">Guess</button>
+        <button onclick="resetGame()"class="secondary">Reset</button>
+    </main>
+    <script>
+        /*
+        Math.random() gives a decimand between 0 and 1 (0.37) Multiplying it with 10 make it between 0 and 10 (3.7) Math.floor removes the decimals(3) +1 shift range 1-10
+        */
+        let secret = Math.floor(Math.random() * 10) + 1
+        let attempts = 0
+        let maxAttempts = 3
+        function checkguess() {
+            let g = Number(document.getElementById("guess").value)
+            attempts++
+            document.getElementById("tries").textContent = attempts
+            if(attempts === maxAttempts && g !== secret) {
+                document.getElementById("message").textContent = "You have run out of attempts"
+                return
+            }
+            }
+            if (g=== secret) {
+                document.getElementById("message").textContent = "Correct, you have won!"
+            } else if(g > secret) {
+                document.getElementById("message").textContent = "you guessed too high, try again...."
+            } else {
+                document.getElementById("message").textContent = "You guess too low, try again...."
+            }
+        
+
+        function resetGame() {
+            secret = Math.floor(Math.random() * 10) + 1
+            attempts = 0
+            document.getElementById("tries").textContent = attempts
+            document.getElementById("message").textContent = "Guess a number from 1 to 10."
+            documnet.getElementById("guess").value = ""
+        }
+        function goBack() {
+        window.history.back();
+        }
+    </script>
+</body>
+</html>

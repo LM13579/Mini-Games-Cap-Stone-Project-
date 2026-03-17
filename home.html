@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Video Game Playtest NDA</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background-image: url(https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUyZHA5d3RzbngzZmk2ajk0eXl4dHMwaGYzdnJqMzVwcDMxc3Mwamw0OCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/Y5wlazC8lSVuU/giphy.gif);
+    margin:0;
+    padding:40px;
+}
+
+.container{
+    max-width:800px;
+    margin:auto;
+    background:rgba(88, 103, 90, 0.674);
+    padding:30px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+h1{
+    text-align:center;
+}
+
+.nda-text{
+    height:300px;
+    overflow-y:scroll;
+    border:1px solid #ccc;
+    padding:15px;
+    margin-bottom:20px;
+    background:#fafafa;
+}
+
+input, button{
+    width:100%;
+    padding:10px;
+    margin-top:10px;
+    font-size:16px;
+}
+
+button{
+    background:#c8d8c9;
+    color:white;
+    border:none;
+    cursor:pointer;
+    padding: 4px 16px;
+    border-radius: 30px;
+}
+
+button:hover{
+    background:#45a049;
+}
+#FN{
+    color: white;
+}
+#DT{
+    color: white;
+}
+#SG{
+    color: white;
+}
+#AG{
+    color: white;
+}
+#btn:hover{
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgb(227, 220, 227);
+}
+#NDA{
+    color: white;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1 id="NDA">Video Game Playtest NDA</h1>
+
+<div class="nda-text">
+
+<p>This Non-Disclosure Agreement ("Agreement") is entered between the Game Developer and the Playtester.</p>
+
+<p>By participating in this video game trial or playtest, you agree that all information regarding the game, including but not limited to gameplay mechanics, graphics, story elements, characters, music, bugs, screenshots, videos, and any other related materials, are confidential.</p>
+
+<p>You agree not to:</p>
+
+<ul>
+<li>Share gameplay footage or screenshots.</li>
+<li>Discuss the game publicly.</li>
+<li>Upload videos or stream gameplay.</li>
+<li>Distribute builds or files of the game.</li>
+</ul>
+
+<p>This confidentiality applies to all forms of communication including social media, forums, streaming platforms, and private messaging.</p>
+
+<p>The obligation of confidentiality will remain in effect until the developer publicly releases the game or provides written permission to disclose information.</p>
+
+<p>If you violate this agreement, you may be removed from the playtest and subject to legal action.</p>
+
+<p>By signing below, you acknowledge that you have read and agree to this Non-Disclosure Agreement. If going back on your word you will be taken to court or you can pay me $100 right Now</p>
+
+</div>
+
+<label id="FN">Full Name</label>
+<input type="text" placeholder="Enter your name">
+
+<label id="DT">Date</label>
+<input type="date">
+
+<label id="SG">Signature (Type your name)</label>
+<input type="text" placeholder="Type your signature">
+
+<label>
+<input id="AG" type="checkbox"> I agree to the NDA terms
+</label>
+
+<button>
+<a href="index.html" id="btn">Submit Agreement</a>
+</button>
+
+</div>
+
+</body>
+</html>

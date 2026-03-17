@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+ 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zombie Game</title>
+    <style>
+    body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin-top: 50px;
+    background-image: url(https://media3.giphy.com/media/v1.Y2lkPTZjMDliOTUyOTdrNzY5N2huanh0b2s0OWRidGlmOWQ4OG1neW56dnNmbDhmbHc1MSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/dv3KfZOkQHFaL8V76B/source.gif);
+    background-size: 120%;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    margin-top: 20px;
+}
+
+.box {
+    border: 1px solid #2a0a88;
+    padding: 25px;
+    width: 200px;
+    transition: background-color 0.3s ease;
+    color: rgb(125, 247, 103);
+    text-shadow:0  0  9px rgb(0, 0, 0);
+    box-shadow: 0 16px 30px rgb(30, 216, 70);
+    border: 4px solid rgb(14, 29, 200);
+}
+
+#userBox:hover{
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgb(233, 9, 233); 
+}
+#zombieBox:hover{
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgb(127, 5, 127);  
+}
+
+.log {
+    margin-top: 20px;
+    max-width: 200px;
+    margin: 100px;
+    border: 1px solid #0916a2;
+    padding: 100px;
+    height: 100px;
+    overflow-y: auto;
+    box-shadow: 0 16px 30px rgb(30, 216, 70);
+    border: 6px solid rgba(23, 13, 163, 0.692);
+}
+.log:hover{
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgb(127, 5, 127);  
+}
+
+.ZG {
+    color: rgb(223, 0, 37);
+    letter-spacing: 0.15em;
+    margin-bottom: 0.8rem;
+    text-shadow:0  0 25px rgb(255, 255, 255);
+    animation-name: pulse;
+    animation-duration: 2.5s; /* Duration of one pulse cycle */
+    animation-iteration-count: infinite; /* Makes it repeat forever */
+    animation-timing-function: ease-in-out; /* Smooths the start and end of the animation */
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.5); /* Original size */
+        opacity: 1;
+    }
+    50% {
+        transform: scale(0.8); /* Slightly larger */
+        opacity: 0.7; /* Optional: fade slightly */
+    }
+    100% {
+        transform: scale(0.5); /* Back to original size */
+        opacity: 1;
+    }
+}
+
+
+
+.title {
+    color: rgb(31, 209, 21);
+    letter-spacing: 0.15em;
+    margin-bottom: 0.8rem;
+    text-shadow:0  0  9px rgb(241, 242, 241);
+    
+}
+button {
+    color: rgb(255, 255, 255);
+    padding: 3px 7px;
+    border-radius: 9px;
+    border: 2px solid #ffffff;
+    background-color: #15da36;
+    margin: 1px;
+    cursor: crosshair;
+}
+
+button:hover{
+    background-color: rgb(255, 0, 0);
+}
+
+.vs {
+    font-size: 3rem;
+    font-weight: bold;
+    color: crimson;
+    text-shadow: 0 0 20px red;
+    animation: pulse 1.5s infinite alternate;
+}
+ 
+ 
+@keyframes pulse {
+    from { transform: scale(0.7); opacity: 0.7; }
+    to { transform: scale(0.9); opacity: 1; }
+}
+ 
+ 
+#userLife, #zombieLife {
+    font-weight: bold;
+    color: #00ff88;
+    text-shadow: 0 0 10px #00ff88;
+}
+
+button:disabled:not(.reset-btn) {
+    cursor: not-allowed;
+    opacity: 0.7;
+    animation: glitch 0.2s infinite;
+    background: #111;
+    color: white;
+}
+ 
+ 
+@keyframes glitch {
+    0% {
+        text-shadow: 2px 0 red, -2px 0 blue;
+        transform: translate(0);
+    }
+    20% {
+        text-shadow: -2px 0 red, 2px 0 blue;
+        transform: translate(-2px, 1px);
+    }
+    40% {
+        text-shadow: 2px 2px red, -2px -2px blue;
+        transform: translate(2px, -1px);
+    }
+    60% {
+        text-shadow: -3px 0 red, 3px 0 blue;
+        transform: translate(0);
+    }
+    80% {
+        text-shadow: 3px -2px red, -3px 2px blue;
+        transform: translate(-1px, 2px);
+    }
+    100% {
+        text-shadow: -2px 0 red, 2px 0 blue;
+        transform: translate(0);
+    }
+}
+ 
+ 
+.reset-btn {
+    background: linear-gradient(45deg, #003300, #00aa00);
+    border: none;
+    margin-top: 25px;
+    font-size: 1.2em;
+}
+ 
+ 
+.reset-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgb(180, 6, 6);  
+}
+
+
+.log-entry {
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    animation: fadeIn 0.4s ease;
+}
+ 
+ 
+.log-entry.damage { color: #ff4d4d; }
+.log-entry.damaged { color: #ff0000; }
+.log-entry.heal { color: #00ff88; }
+.log-entry.poison { color: #2ba12b; }
+.log-entry.special { color: rgb(131, 99, 172); font-weight: bold; }
+.log-entry.won { color: gold; font-weight: bold; }
+.log-entry.lose { color: crimson; font-weight: bold; }
+.log-entry.tired { color: gray; }
+ 
+ 
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+ 
+ 
+/* Scrollbar Styling */
+.log::-webkit-scrollbar {
+    width: 8px;
+}
+ 
+ 
+.log::-webkit-scrollbar-thumb {
+    background: rgb(23, 20, 220);
+    border-radius: 10px;
+}
+    #back{
+        color: rgb(6, 6, 6);
+        background-color: rgba(14, 245, 49, 0.451);
+        padding: 2px 13px;
+        border-radius: 25px;
+        font-weight: bold;
+        border-radius: 30px;
+        font-size: 1.1rem;
+        position: fixed;
+        top: 20px;
+        left: 20px;
+    }
+    #back:hover{
+        transform: scale(1.05);
+        box-shadow: 0 0 40px rgb(0, 255, 64);
+    }    
+    </style>
+</head>
+ <body>
+    <button id="back" onclick="goBack()">⬅ Back</button>
+    <h1 class="ZG">Zombie Game</h1>
+    <h2 class="title">Can You Defeat the Zombie?</h2>
+        
+    <marquee direction="right">
+        <img src="https://cdnb.artstation.com/p/assets/images/images/034/452/483/original/jeong-h-lee-ezgif-com-resize-2.gif?1612329061" height="85">
+        <img src="https://i.pinimg.com/originals/37/b0/48/37b04822a0289888d4423f6daabe04a6.gif" height="90">
+        <img src="https://cdnb.artstation.com/p/assets/images/images/010/828/411/original/brian-hernandez-zombie-att.gif?1526438296" width="100">
+    </marquee>
+        <div class="vs">VS</div>
+    <div class="container">
+        <div class="box" id="userBox">
+            <h2>User<div><img src="https://64.media.tumblr.com/a27d45be1a623ef52828fa4dbd7cc2ed/eb152ea6d5c4bde7-d9/s540x810/369478b356ff33f75e4d30ed6f7f959fd342f251.gif" width="200"></div></h2>
+            <p>Name: <span id="userName">Player 1</span></p>
+            <p>Life: <span id="userLife">100</span></p>
+            <p>Level: <span id="userLevel">1</span></p>
+            <p>XP: <span id="userXP">0</span>/100</p>
+            <p>Potions: <span id="userPotions">3</span></p>
+            <p>Ammo: <span id="userAmmo">30</span></p>
+            <p>medkits: <span id="userMedkit">3</span></p>
+            <p>Combo Strikes: <span id="comboCount">0</span></p>
+            <button id="attack" class="button" onclick="user.userAttack()">Attack Zombie</button>
+            <button id="heal" onclick="user.userHeal()">Use Medkit</button>
+            <button id="Potion" onclick="user.usePotion()">Use Potion</button>
+            <button id="gun" onclick="user.gun()">Use Gun</button>
+            <button id="comboCounter" onclick="user.comboAttack()">Combo Attack</button>
+        </div>
+            <div class="log" id="log"></div>
+        <div class="box" id="zombieBox">
+            <h2>Zombie<div><img src="https://usagif.com/wp-content/uploads/2022/fzk5d/zombie-halloween-5-scary-zombie-dancing-running.gif" width="150"></div></h2>
+            <p>Name: <span id="zombieName">Zombie</span></p>
+            <p>Life: <span id="zombieLife">150</span></p>
+            <p>Type: <span id="zombieType">Tank</span></p>
+        </div>
+    </div>    
+    <button class="reset-btn" onclick="resetGame()">New Game?</button>
+    <script>
+        const user = {
+    name: "Player 1",
+    life: 100,
+    attack: 10,
+    heal: 20,
+    healed: 3,
+    Ammo: 30,
+    potions: 3,
+    comboCount: 0,
+    xp: 0,
+    level: 1,
+    isPoisoned: false,
+ 
+ 
+    xpGain: function () {
+        this.xp++;
+        this.xp = 1 + Math.floor(Math.random() * 5);
+ 
+ 
+        this.levelUp()
+        updateGameDisplay()
+        logAction(`you gained xp! you have ${this.xp}xp!`, 'won')
+    },
+ 
+ 
+    levelUp: function () {
+        if (this.xp === 100) {
+            this.level++;
+            this.level = 1;
+        }
+    },
+ 
+ 
+    userAttack: function () {
+        // Logic for attacking the zombie
+        // Calculate damage
+ 
+ 
+ 
+        let damage = Math.floor(Math.random() * 10) + 3;
+ 
+ 
+ 
+        // Apply damage to zombie
+        zombie.life -= damage;
+ 
+ 
+        // Update UI and log action
+        updateGameDisplay();
+        logAction(`Player attacks for ${damage} damage!`, 'damage');
+ 
+ 
+        // Check for game over conditions
+        if (zombie.life <= 0) {
+            gameOver("win");
+ 
+ 
+        } else {
+            // Zombie counter-attack
+            zombie.zombieAttack();
+        }
+    },
+ 
+ 
+    userHeal: function () {
+        // Logic for healing the user
+ 
+ 
+        if (this.life === 100) {
+            logAction("HP is already full!", 'tired');
+            return;
+        } else {
+ 
+ 
+            this.life = Math.min(this.life + this.heal, 100);
+            logAction(`user healed them slefs for ${this.heal}`, 'heal')
+            this.healed--;
+            updateGameDisplay()
+ 
+ 
+        }
+ 
+ 
+        if (this.healed === 0){
+            document.getElementById('heal').disabled = true;
+        } else {
+            document.getElementById('heal').disabled = false;
+        }
+ 
+ 
+ 
+ 
+ 
+ 
+    },
+    usePotion: function () {
+        // Logic for using a potion
+        if (this.isPoisoned == false) {
+            updateGameDisplay()
+            logAction(`you dont need this right now`, 'tired')
+            checkGameOver()
+        } else {
+            this.isPoisoned = false;
+            this.potions--;
+            updateGameDisplay()
+            logAction(`the player used a potion! you have ${this.potions} potions left`, 'heal')
+            checkGameOver()
+ 
+ 
+        }
+ 
+ 
+        if (this.potions === 0) {
+            document.getElementById('Potion').disabled = true;
+        }
+ 
+ 
+ 
+    },
+    gun: function () {
+        // Logic for special attack (deals 30 damage)
+        if (Math.random() < 0.20) {
+            const gunDamge = Math.floor(Math.random() * 100);
+            zombie.life -= gunDamge;
+            this.Ammo--;
+            logAction(`the user pulls out a GUN! he fires the gun dealing ${gunDamge} damage!`, 'special')
+            checkGameOver()
+            
+        } else {
+            this.Ammo--;
+            logAction('the gun jams!', 'tired')
+            zombie.zombieAttack()
+            
+        }
+ 
+ 
+        if (this.Ammo === 0){
+            document.getElementById('gun').disabled = true;
+        }
+ 
+ 
+        updateGameDisplay()
+ 
+ 
+    },
+    comboAttack: function () {
+        // Logic for combo attack (3 consecutive hits) 
+        let totalDamage = 0;
+        let comboLog = "COMBO ATTACK: ";
+ 
+ 
+        // Loop for multiple hits
+        for (let i = 0; i < 3; i++) {
+            let damage = Math.floor(Math.random() * 20) + 5;
+            totalDamage += damage;
+            this.comboCount++;
+ 
+ 
+            // Build dynamic message
+            comboLog += `Hit ${i + 1} deals ${damage} damage! `, 'special';
+        }
+ 
+ 
+        // Apply total damage
+        zombie.life -= totalDamage;
+ 
+ 
+ 
+ 
+        // Log the complete combo
+        logAction(comboLog + `Total: ${totalDamage} damage!`, 'special');
+ 
+ 
+        if (this.comboCount === 6) {
+            logAction('the users tired! and cant do anymore combos!', 'tired')
+            document.getElementById('comboCounter').disabled = true;
+        }
+ 
+ 
+        updateGameDisplay();
+ 
+ 
+        if (zombie.life <= 0) {
+            gameOver("win");
+        } else {
+            zombie.zombieAttack();
+        }
+ 
+ 
+    }
+};
+ 
+ 
+ 
+ 
+ 
+function checkGameOver() {
+    if (user.life <= 0) {
+        gameOver("lose")
+        user.level = 0;
+        // Player loses
+    } else if (zombie.life <= 0) {
+        // Player wins
+        gameOver("win")
+    }
+}
+ 
+ 
+function gameOver(result) {
+ 
+ 
+    // let message = "";
+ 
+ 
+    if (result === "win") {
+        logAction("USER WINS!", 'won')
+        user.xpGain()
+        updateGameDisplay()
+    } else {
+        logAction("the user was bit! and turned into a zombie!", 'lose')
+    }
+ 
+ 
+    updateGameDisplay()
+ 
+ 
+    document.querySelectorAll('button:not(.reset-btn)')
+  .forEach(button => button.disabled = true);
+ 
+ 
+}
+ 
+ 
+// Zombie object - Enemy character with defensive abilities
+const zombie = {
+    name: "Zombie",
+    life: 150,
+    attack: 8,
+ 
+ 
+ 
+ 
+    zombieAttack: function () {
+        // Logic for attacking the user
+        const attacks = [
+            { name: "Bite", damage: 5 },
+            { name: "Scratch", damage: 8 },
+            { name: "Zombie Leep", damage: 20 },
+        ];
+ 
+ 
+        const ranMove = attacks[Math.floor(Math.random() * attacks.length)];
+        let cpuMove = attacks[ranMove];
+ 
+ 
+        if (ranMove.name === "Bite") {
+            user.life -= ranMove.damage;
+            user.isPoisoned = true;
+            logAction(`Zombie bit the player! You are poisoned!`, 'poison');
+            updateGameDisplay()
+            checkGameOver()
+ 
+ 
+        } else {
+            user.life -= ranMove.damage;
+            logAction(`zombie used ${ranMove.name}! Dealt ${ranMove.damage} damage!`, 'damaged');
+            updateGameDisplay()
+            checkGameOver()
+ 
+ 
+        }
+        this.poison()
+        updateGameDisplay()
+        checkGameOver()
+ 
+ 
+ 
+    },
+    poison: function () {
+        // Logic for poisoning the user each turn
+        if (user.isPoisoned && user.life > 0) {
+            const poisonDamage = 5;
+            user.life -= poisonDamage;
+            logAction(`Poison damage! You lost ${poisonDamage} HP.`, 'poison');
+            updateGameDisplay();
+            checkGameOver();
+        }
+ 
+ 
+ 
+    },
+};
+ 
+ 
+ 
+ 
+ 
+function resetGame() {
+    user.life = 100;
+    user.potions = 3;
+    user.healed = 3;
+    user.Ammo = 30;
+    user.comboCount = 0;
+    user.isPoisoned = false;
+ 
+ 
+    zombie.life = 150;
+ 
+ 
+    document.querySelectorAll('button').forEach(button => button.disabled = false);
+ 
+ 
+    logAction('A new zombie runs at you!', 'damaged')
+    updateGameDisplay();
+}
+ 
+ 
+ 
+ 
+// Core game functions
+function updateGameDisplay() {
+    // Logic to update user and zombie stats on page
+    document.getElementById('userLife').textContent = user.life;
+    document.getElementById('zombieLife').textContent = zombie.life;
+    document.getElementById('userXP').textContent = user.xp;
+    document.getElementById('userLevel').textContent = user.level;
+    document.getElementById('comboCount').textContent = user.comboCount;
+    document.getElementById('userPotions').textContent = user.potions;
+    document.getElementById('userAmmo').textContent = user.Ammo;
+    document.getElementById('userMedkit').textContent = user.healed;
+ 
+ 
+    const playerHpPercent = (user.life / 100) * 100;
+    const enemyHpPercent = (zombie.life / 150) * 100;
+ 
+ 
+ 
+ 
+}
+ 
+ 
+function logAction(action, type = '') {
+    // Logic to log actions in the game display
+    const log = document.getElementById('log');
+    const entry = document.createElement("p");
+    entry.className = `log-entry ${type}`;
+    entry.textContent = action;
+    log.insertBefore(entry, log.firstChild);
+}
+    function goBack() {
+    window.history.back();
+    }
+    </script> 
+</body>
+</html>

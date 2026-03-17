@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whack-a-Mole</title>
+    <style>
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #2d5016;
+    background-image: url(https://media.tenor.com/BKis-8oMBcUAAAAM/yes-no.gif);
+    background-repeat: no-repeat;
+    background-size: 100%;
+    color: #eee;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    text-align: center;
+    padding: 30px;
+}
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.stats {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+.stats strong {
+    color: #ffd700;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 120px);
+    grid-template-rows: repeat(3, 120px);
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+.hole {
+    background-color: #1a3a0a4f;
+    border-radius: 50%;
+    border: 4px solid #ffffff;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.mole {
+    font-size: 3rem;
+    transform: translateY(100%);
+    transition: transform 0.2s ease-out;
+    user-select: none;
+}
+
+.hole.active .mole {
+    transform: translateY(0);
+}
+
+.hole:active {
+    transform: scale(0.95);
+}
+
+button {
+    padding: 12px 30px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background-color: #ffd700;
+    color: #333;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+button:hover {
+    background-color: #ffec4d;
+    transform: translateY(-2px);
+}
+
+button:disabled {
+    background-color: #666;
+    color: #999;
+    cursor: not-allowed;
+    transform: none;
+}
+
+img {
+    height: 190px;
+    width: 290px;
+    border-radius: 70%;
+}
+#back:hover{
+        transform: scale(1.05);
+        box-shadow: 0 0 40px rgb(245, 245, 5);
+    }
+
+#back{
+        color: rgb(6, 6, 6);
+        background-color: rgb(245, 226, 14);
+        padding: 2px 13px;
+        border-radius: 25px;
+        font-weight: bold;
+        border-radius: 30px;
+        font-size: 1.1rem;
+        position: fixed;
+        top: 20px;
+        left: 20px;
+    }
+    </style>
+</head>
+    <button id="back" onclick="goBack()">⬅ Back</button>
+<body>
+    <div class="container">
+        <h1>Whack-a-Mole</h1>
+        <div class="stats">
+            <span>Score: <strong id="score">0</strong></span>
+            <span>Time: <strong id="timer">30</strong>s</span>
+        </div>
+
+        <div class="grid" id="grid">
+            <div class="hole" data-index="0"><div class="mole">🐹</div></div>
+            <div class="hole" data-index="1"><div class="mole">🐹</div></div>
+            <div class="hole" data-index="2"><div class="mole">🐹</div></div>
+            <div class="hole" data-index="3"><div class="mole">🐹</div></div>
+            <div class="hole" data-index="4"><div class="mole">🐹</div></div>
+            <div class="hole" data-index="5"><div class="mole">🐹</div></div>
+            <div class="hole" data-index="6"><div class="mole">🐹</div></div>
+            <div class="hole" data-index="7"><div class="mole">🐹</div></div>
+            <div class="hole" data-index="8"><div class="mole">🐹</div></div>
+
+
+
+
+
+
+        </div>
+
+        <button id="startBtn">Start Game</button>
+    </div>
+
+    <script>
+        // Dom Elements 
+
+const grid = document.getElementById('grid');
+const holes = document.querySelectorAll('.hole');
+const scoreDisplay = document.getElementById('score');
+const timerDisplay = document.getElementById('timer');
+const startBtn = document.getElementById('startBtn');
+
+// Game State
+
+let score = 0;
+let timeLeft = 30;
+let gameRunning = false;
+let moleTimer = null;
+let countdownTimer = null;
+let lastHoleIndex = -1;
+
+function showMole() {
+    // pick a random hole, but not the same as last time 
+    let randomIndex;
+    do {
+        randomIndex = Math.floor(Math.random() * holes.length);
+    } while (randomIndex === lastHoleIndex);
+    lastHoleIndex = randomIndex;
+
+    const hole = holes [randomIndex];
+    hole.classList.add('active');
+    // Mole disappears after a random tie ( 600ms to 1200ms)
+    const displayTime = Math.random() * 600 + 600;
+    setTimeout(() => {
+        hole.classList.remove('active');
+    }, displayTime);
+}
+
+function startGame() {
+    // Reset state
+    score = 0;
+    timeLeft = 30;
+    lastHoleIndex = -1;
+    scoreDisplay.textContent = '0';
+    timerDisplay.textContent = '30';
+    startBtn.disable = true;
+    gameRunning = true;
+
+    // Show a new mole every 800ms 
+    moleTimer = setInterval(showMole, 800);
+
+    // Countdown timer - runs every 1 second 
+    countdownTimer = setInterval(() => {
+        timeLeft--;
+        
+        timerDisplay.textContent = timeLeft;
+       
+        if (timeLeft <= 0){
+            endGame();
+        }
+    }, 1000);
+    
+}
+
+function endGame() {
+    gameRunning = false;
+    clearInterval(moleTimer);
+    clearInterval(countdownTimer);
+
+    // Hide any remaining mole
+    holes.forEach(hole => hole.classList.remove('active'));
+
+    startBtn.disable = false;
+    startBtn.textContent = "Play Again";
+}
+
+// - - - Event Listeners - - -
+grid.addEventListener('click', (event) => {
+    if(!gameRunning) return;
+
+// Find the hole that was clicked( could be the mole or the hole div)
+    const hole = event.target.closest('.hole');
+    if(!hole) return;
+// Only score if the mole is showing
+    if(hole.classList.contains('active')){
+        score++;
+        scoreDisplay.textContent = score;
+        hole.classList.remove('active');
+    }
+});
+
+    startBtn.addEventListener('click', startGame);
+     function goBack() {
+        window.history.back();
+        }
+    </script>
+</body>
+</html>

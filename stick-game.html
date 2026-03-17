@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stick Game</title>
+    <style>
+    *{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    }
+
+    body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin-top: 50px;
+    background-color: rgb(149, 145, 145);
+    color: rgb(0, 0, 0);
+    }
+    .container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    }
+    .box {
+    border: 1px solid #ccc;
+    padding: 20px;
+    width: 300px;
+    transition: background-color 0.3s ease;
+    box-shadow:2px 10px 15px rgb(217, 211, 218);
+    }
+
+    .btn{
+    padding: 5px 12px;
+    border-radius: 10px;
+    border: 2px solid #9499a5;
+    background-color: #ab6be0;
+    cursor:crosshair;
+    margin: 10px;
+    /* Apply the animation */
+    animation-name: pulse;
+    animation-duration: 2.5s; /* Duration of one pulse cycle */
+    animation-iteration-count: infinite; /* Makes it repeat forever */
+    animation-timing-function: ease-in-out; /* Smooths the start and end of the animation */
+    }
+
+    @keyframes pulse {
+    0% {
+        transform: scale(0.1); /* Original size */
+        opacity: 1;
+    }
+    50% {
+        transform: scale(0.1); /* Slightly larger */
+        opacity: 0.7; /* Optional: fade slightly */
+    }
+    100% {
+        transform: scale(1); /* Back to original size */
+        opacity: 1;
+    }
+    }
+
+
+    .btn:hover{
+    background-color: rgb(184, 200, 43);
+    
+    }
+    #btn1:hover{
+    background-color: rgb(0, 255, 136);
+    }
+    #btn2:hover{
+    background-color: rgb(0, 255, 162);
+    }
+
+    #back:hover{
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgb(234, 0, 255);
+    }
+
+    #back{
+        color: rgb(6, 6, 6);
+        background-color: rgba(243, 135, 255, 0.451);
+        padding: 2px 13px;
+        border-radius: 25px;
+        font-weight: bold;
+        border-radius: 30px;
+        font-size: 1.1rem;
+        position: fixed;
+        top: 20px;
+        left: 20px;
+    }
+
+
+    .title{
+    font-size: 2.2rem;
+    letter-spacing: 0.15em;
+    margin-bottom: 0.8rem;
+    text-shadow:  0 3px #dded00;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10vh;
+
+    /* Apply the animation */
+    animation-name: pulse;
+    animation-duration: 2.5s; /* Duration of one pulse cycle */
+    animation-iteration-count: infinite; /* Makes it repeat forever */
+    animation-timing-function: ease-in-out; /* Smooths the start and end of the animation */
+    }
+
+    @keyframes pulse {
+    0% {
+        transform: scale(1); /* Original size */
+        opacity: 1;
+    }
+    50% {
+        transform: scale(0.8); /* Slightly larger */
+        opacity: 0.9; /* Optional: fade slightly */
+    }
+    100% {
+        transform: scale(1); /* Back to original size */
+        opacity: 1;
+    }
+    }
+
+    .question{
+    font-size: 2.2rem;
+    letter-spacing: 0.15em;
+    margin-bottom: 0.8rem;
+    text-shadow:  0 3px #c9a7d7;
+
+    }
+
+
+
+
+    canvas{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -999;
+    background: rgb(116, 115, 115);
+    }
+
+    .Instructions{
+    color: rgb(249, 238, 238);
+    font-family: Arial, sans-serif;
+    text-align: center;
+    text-shadow: 0 0 1px;
+    }
+
+    #btn1{
+    padding: 5px 12px;
+    border-radius: 10px;
+    border: 2px solid #9499a5;
+    background-color: #ab6be0;
+    cursor:crosshair;
+    margin: 10px;
+        /* Apply the animation */
+    animation-name: pulse;
+    animation-duration: 2.5s; /* Duration of one pulse cycle */
+    animation-iteration-count: infinite; /* Makes it repeat forever */
+    animation-timing-function: ease-in-out; /* Smooths the start and end of the animation */
+    }
+
+    @keyframes pulse {
+    0% {
+        transform: scale(1); /* Original size */
+        opacity: 1;
+    }
+    50% {
+        transform: scale(0.8); /* Slightly larger */
+        opacity: 0.9; /* Optional: fade slightly */
+    }
+    100% {
+        transform: scale(1); /* Back to original size */
+        opacity: 1;
+    }
+    }
+
+    #btn2{
+    padding: 5px 12px;
+    border-radius: 10px;
+    border: 2px solid #9499a5;
+    background-color: #ab6be0;
+    cursor:crosshair;
+    margin: 10px;
+        /* Apply the animation */
+    animation-name: pulse;
+    animation-duration: 2.5s; /* Duration of one pulse cycle */
+    animation-iteration-count: infinite; /* Makes it repeat forever */
+    animation-timing-function: ease-in-out; /* Smooths the start and end of the animation */
+    }
+
+    @keyframes pulse {
+    0% {
+        transform: scale(1); /* Original size */
+        opacity: 1;
+    }
+    50% {
+        transform: scale(0.8); /* Slightly larger */
+        opacity: 0.9; /* Optional: fade slightly */
+    }
+    100% {
+        transform: scale(1); /* Back to original size */
+        opacity: 1;
+    }
+    }
+    </style>
+</head>
+<body>
+    <button id="back" onclick="goBack()">⬅ Back</button>
+    <canvas id="bg"></canvas>
+    <h1 class="title">Stick Game</h1>
+    <h2 class="question">Can you avoid the last stick?</h2>
+    <div>
+        <marquee><img src="https://media4.giphy.com/media/v1.Y2lkPTZjMDliOTUyOTRlNm5pb2E1ODdldXVxNmpxbGs4ZHlhN3djeW5yNmV4MnN0bHJkbyZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/2izKYYBNvC54k/200w.gif" width="50"></marquee>
+    </div>
+    <div class="container">
+        <div class="box" id="gameBox">
+            <p class="Instructions">Instructions: Take turns removing 1 or 2 sticks from the pile. The player forced to take the last stick loses!</p>
+            <button id="btn1">
+            Take 1 Stick
+            </button>
+            <button id="btn2">
+            Take 2 Sticks
+            </button>
+            <button class="btn btn-primary" onclick="game()">Start Game</button>
+        </div>
+    </div>
+    <script>
+        function game() {
+    // 1. Setup initial variables
+    let playAgain = 'y';
+    let numSticks = 21;
+    let playersTurn = true;
+ 
+    
+    while (playAgain === 'y') {
+        numSticks = 21; // Reset sticks for new game
+        alert("Welcome to Stick Game! Don't end up with the last stick!");
+ 
+ 
+        let answer = prompt("Would you like to go first? (y/n)");
+        playersTurn = (answer.toLowerCase() === 'y');
+ 
+ 
+        // 2. The Main Game Loop
+        while (numSticks > 1) {
+            if (playersTurn) {
+                // Player's Turn
+                let take = parseInt(prompt("There are " + numSticks + " sticks left.\nHow many do you take? (1 or 2)"));
+                if (take !== 1 && take !== 2) take = 1; // Basic validation
+                
+                numSticks -= take;
+                alert("You took " + take + " sticks. Left: " + numSticks);
+                playersTurn = false;
+            } else {
+                // Computer's Turn (Simple Strategy)
+                let compTake = (numSticks - 1) % 3;
+                if (compTake === 0) compTake = 1; // Fallback if losing
+                
+                numSticks -= compTake;
+                alert("Computer took " + compTake + " sticks. Left: " + numSticks);
+                playersTurn = true;
+            }
+        }
+ 
+ 
+        // 3. Determine Winner
+        if (numSticks === 1) {
+            if (playersTurn) {
+                alert("Only 1 stick left and it's your turn. You lose!");
+            } else {
+                alert("Only 1 stick left for the computer. You win!");
+            }
+        }
+ 
+ 
+        playAgain = prompt("Would you like to play again? (y/n)");
+    }
+    
+    alert("Thanks for playing!");
+}
+
+
+//end
+
+
+
+const canvas = document.getElementById("bg")
+
+const ctx = canvas.getContext("2d")
+
+function resizefn(){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+resizefn();
+
+window.addEventListener("resize", resizefn)
+
+
+
+const particles=[]
+const count = 60
+for(let i = 0; i < count; i++ ) {
+    particles.push({
+        x:Math.random() * canvas.width,
+        y:Math.random() * canvas.height,
+        vx:(Math.random()-0.5) * 0.3,
+        vy:(Math.random()-0.5) * 0.3,
+        r:Math.random() * 2 + 1
+    })
+}
+
+
+
+
+function animate(){
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+    for(const p of particles) {
+        p.x += p.vx
+        p.y += p.vy
+
+        if(p.x < 0){
+            p.x = canvas.width
+        }
+        if(p.x > canvas.width){
+            p.x = 0
+        }
+        if(p.y < 0){
+            p.y = canvas.height
+        }
+        if(p.y > canvas.height){
+            p.y = 0
+        }
+        ctx.beginPath()
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2)
+        ctx.fillStyle ="rgba(223, 223, 223, 0.9)"
+        ctx.fill()
+    }
+    requestAnimationFrame(animate)
+}
+
+animate()
+    function goBack() {
+    window.history.back();
+    }
+    </script>
+
+</body>
+</html>
